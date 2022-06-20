@@ -14,8 +14,8 @@ export async function launch(puppeteerLib: typeof puppeteer): Promise<puppeteer.
   });
 }
 
-export async function setupPhantom(browser: puppeteer.Browser, options: SetupPhantomOption): Promise<void> {
-  await handleOnboarding(browser, async (page: puppeteer.Page) => {
-    await importAccount(page, options.seed, options.password);
+export function setupPhantom(browser: puppeteer.Browser, options: SetupPhantomOption): void {
+  handleOnboarding(browser, async (page: puppeteer.Page) => {
+    importAccount(page, options.seed, options.password);
   });
 }

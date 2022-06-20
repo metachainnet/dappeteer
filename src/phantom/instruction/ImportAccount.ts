@@ -1,12 +1,6 @@
 import * as pupeteer from 'puppeteer';
 
-const importAccount = async (
-  phantomPage: pupeteer.Page,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  seed: string,
-  password: string,
-  //   hideSeed: boolean,
-): Promise<void> => {
+const importAccount = async (phantomPage: pupeteer.Page, seed: string, password: string): Promise<void> => {
   // TODO 추상화
   const seeds = seed.split(' ');
   if (!(seeds.length === 12 || seeds.length === 24)) {
