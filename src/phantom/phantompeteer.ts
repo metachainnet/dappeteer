@@ -1,6 +1,9 @@
 import * as puppeteer from 'puppeteer';
+import { SetupPhantomOption } from './constants/SetupPhantomOption';
 
 import downloader from './downloader';
+import getPhantomExtensionPage from './instruction/GetePhantomExtensionPage';
+import importAccount from './instruction/ImportAccount';
 
 export async function launch(puppeteerLib: typeof puppeteer): Promise<puppeteer.Browser> {
   const PHANTOM_PATH = await downloader();
@@ -12,7 +15,7 @@ export async function launch(puppeteerLib: typeof puppeteer): Promise<puppeteer.
   });
 }
 
-// export async function setupPhantom(browser: puppeteer.Browser): Promise<Dappeteer> {
-//   const page = await closeHomeScreen(browser);
-//   await confirmWelcomeScreen(page);
-// }
+export async function setupPhantom(browser: puppeteer.Browser, options: SetupPhantomOption): Promise<void> {
+  const phantomPage = await getPhantomExtensionPage(browser);
+  await importAccount(phantomPage, options.seed, options.password);
+}
