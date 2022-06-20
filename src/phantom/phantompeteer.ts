@@ -1,8 +1,8 @@
 import * as puppeteer from 'puppeteer';
-import { SetupPhantomOption } from './constants/SetupPhantomOption';
 
+import { SetupPhantomOption } from './constants/SetupPhantomOption';
 import downloader from './downloader';
-import getPhantomExtensionPage from './instruction/GetePhantomExtensionPage';
+import handleOnboarding from './instruction/HandleOnboarding';
 import importAccount from './instruction/ImportAccount';
 
 export async function launch(puppeteerLib: typeof puppeteer): Promise<puppeteer.Browser> {
@@ -11,11 +11,11 @@ export async function launch(puppeteerLib: typeof puppeteer): Promise<puppeteer.
   return puppeteerLib.launch({
     headless: false,
     args: [`--disable-extensions-except=${PHANTOM_PATH}`, `--load-extension=${PHANTOM_PATH}`],
-    // ...rest,
   });
 }
 
 export async function setupPhantom(browser: puppeteer.Browser, options: SetupPhantomOption): Promise<void> {
-  const phantomPage = await getPhantomExtensionPage(browser);
-  await importAccount(phantomPage, options.seed, options.password);
+  await handleOnboarding(browser, async (page: puppeteer.Page) => {
+    await importAccount(page, options.seed, options.password);
+  });
 }
