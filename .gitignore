@@ -5,6 +5,7 @@ build
 dist
 .vscode/
 /metamask
+/phantom
 .idea
 *.log
 test/dapp/data.js
