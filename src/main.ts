@@ -41,12 +41,6 @@ async function main(): Promise<void> {
 
     await Promise.all(batchPromises);
   }
-
-  // await registerSelling({
-  //   browser,
-  //   key: 'G1UCM15bkSaYhTJyTab8xvyNpgR2HnQoHXT2mUHUrhus',
-  //   price: 4.99,
-  // });
 }
 
 async function moveToOpensea(browser: puppeteer.Browser): Promise<puppeteer.Page> {

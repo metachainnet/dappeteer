@@ -31,6 +31,9 @@ const registerSelling = async (param: RegisterSellingParam): Promise<void> => {
   await endTime.type('21:00');
   await endTime.type('a');
 
+  const completeBtn = await page.waitForSelector('button[type="submit"]');
+  await completeBtn.click();
+
   handleNotificationPage(browser, async (page) => {
     const connectBtn = await page.waitForSelector('button.sc-bqiRlB.hLGcmi.sc-hBUSln.dhBqSt');
     await connectBtn.click();
