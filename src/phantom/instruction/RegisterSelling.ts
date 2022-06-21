@@ -1,13 +1,16 @@
 import pupeteer from 'puppeteer';
 
+import handleNotificationPage from './HandleNotification';
+
 export interface RegisterSellingParam {
-  page: pupeteer.Page;
+  browser: pupeteer.Browser;
   key: string;
   price: number;
 }
 
 const registerSelling = async (param: RegisterSellingParam): Promise<void> => {
-  const { page, key, price } = param;
+  const { browser, key, price } = param;
+  const page = await browser.newPage();
   const url = `https://opensea.io/assets/solana/${key}/sell`;
   await page.goto(url);
 
@@ -27,6 +30,11 @@ const registerSelling = async (param: RegisterSellingParam): Promise<void> => {
   await startTime.type('a');
   await endTime.type('21:00');
   await endTime.type('a');
+
+  handleNotificationPage(browser, async (page) => {
+    const connectBtn = await page.waitForSelector('button.sc-bqiRlB.hLGcmi.sc-hBUSln.dhBqSt');
+    await connectBtn.click();
+  });
 };
 
 export default registerSelling;

@@ -3,27 +3,50 @@ import puppeteer from 'puppeteer';
 import handleNotification from './phantom/instruction/HandleNotification';
 import registerSelling from './phantom/instruction/RegisterSelling';
 import * as dappeteer from './phantom/phantompeteer';
+import secret from './secret';
 
 async function main(): Promise<void> {
   const browser = await dappeteer.launch(puppeteer);
 
   dappeteer.setupPhantom(browser, {
-    seed: 'patch receive win way lyrics olympic tribe clump noodle shrug reason gossip',
-    password: 'Forbiddenkingdom123!',
+    seed: secret.seed,
+    password: secret.password,
   });
 
-  const openseaPage = await moveToOpensea(browser);
+  await moveToOpensea(browser);
 
   handleNotification(browser, async (page) => {
     const connectBtn = await page.waitForSelector('button.sc-bqiRlB.hLGcmi.sc-hBUSln.dhBqSt');
     await connectBtn.click();
   });
 
-  await registerSelling({
-    page: openseaPage,
-    key: 'G1UCM15bkSaYhTJyTab8xvyNpgR2HnQoHXT2mUHUrhus',
-    price: 4.99,
-  });
+  const addresses = await import('../mint-addresses.json');
+  const targetAddresses = addresses.default.slice(0, 2500);
+  const batchSize = 10;
+  const price = 4.99; // sol
+
+  while (targetAddresses.length > 0) {
+    const queue = [];
+    while (queue.length !== batchSize) {
+      queue.push(targetAddresses.pop());
+    }
+
+    const batchPromises = queue.map((address) =>
+      registerSelling({
+        browser,
+        key: address,
+        price,
+      }),
+    );
+
+    await Promise.all(batchPromises);
+  }
+
+  // await registerSelling({
+  //   browser,
+  //   key: 'G1UCM15bkSaYhTJyTab8xvyNpgR2HnQoHXT2mUHUrhus',
+  //   price: 4.99,
+  // });
 }
 
 async function moveToOpensea(browser: puppeteer.Browser): Promise<puppeteer.Page> {
