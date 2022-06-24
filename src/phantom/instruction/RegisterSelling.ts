@@ -10,33 +10,37 @@ export interface RegisterSellingParam {
 
 const registerSelling = async (param: RegisterSellingParam): Promise<void> => {
   const { browser, key, price } = param;
-  const page = await browser.newPage();
+  const sellingPage = await browser.newPage();
   const url = `https://opensea.io/assets/solana/${key}/sell`;
-  await page.goto(url);
+  await sellingPage.goto(url);
 
-  const priceInput = await page.waitForSelector('#price');
+  const priceInput = await sellingPage.waitForSelector('#price');
   await priceInput.type(price.toString());
 
-  const durationBtn = await page.waitForSelector('#duration');
+  const durationBtn = await sellingPage.waitForSelector('#duration');
   await durationBtn.click();
 
-  const [startDate, endDate] = await page.$$('input[type="date"]');
-  const startTime = await page.waitForSelector('#start-time');
-  const endTime = await page.waitForSelector('#end-time');
+  const [startDate, endDate] = await sellingPage.$$('input[type="date"]');
+  await startDate.type('0714');
+  await endDate.type('0814');
 
-  await startDate.type('0628');
-  await endDate.type('0728');
-  await startTime.type('21:00');
+  const startTime = await sellingPage.waitForSelector('#start-time');
+  await startTime.type('08:00');
   await startTime.type('a');
-  await endTime.type('21:00');
+  const endTime = await sellingPage.waitForSelector('#end-time');
+  await endTime.type('08:00');
   await endTime.type('a');
 
-  const completeBtn = await page.waitForSelector('button[type="submit"]');
+  const h1 = await sellingPage.waitForSelector('h1');
+  await h1.click();
+
+  const completeBtn = await sellingPage.waitForSelector('button[type="submit"]');
   await completeBtn.click();
 
   handleNotificationPage(browser, async (page) => {
     const connectBtn = await page.waitForSelector('button.sc-bqiRlB.hLGcmi.sc-hBUSln.dhBqSt');
     await connectBtn.click();
+    await sellingPage.close();
   });
 };
 
