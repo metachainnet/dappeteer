@@ -15,7 +15,8 @@
     "lint": "eslint --color --ext .ts src/ test/",
     "lint:fix": "yarn run lint --fix",
     "test": "mocha",
-    "start": "ts-node src/main.ts"
+    "start": "ts-node src/main.ts",
+    "refresh": "ts-node src/refresh.ts"
   },
   "repository": {
     "type": "git",
