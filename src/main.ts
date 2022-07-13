@@ -2,6 +2,7 @@ import puppeteer from 'puppeteer';
 
 import handleNotification from './phantom/instruction/HandleNotification';
 import registerSelling from './phantom/instruction/RegisterSelling';
+import cancelListing from './phantom/instruction/CancelListing';
 import * as dappeteer from './phantom/phantompeteer';
 import secret from './secret';
 
@@ -20,22 +21,29 @@ async function main(): Promise<void> {
     await connectBtn.click();
   });
 
+  let idx = 703;
+let first = idx;
   const addresses = await import('../mint-addresses.json');
-  const targetAddresses = addresses.default.slice(0, 2500);
-  const batchSize = 10;
+  const targetAddresses = addresses.default.slice(idx).reverse();
+  const batchSize = 1;
   const price = 4.99; // sol
 
   while (targetAddresses.length > 0) {
     const queue = [];
     while (queue.length !== batchSize) {
-      queue.push(targetAddresses.pop());
+	let target = targetAddresses.pop();
+	console.log('target : ', target);
+	console.log('idx : ' , idx);
+	queue.push(target);
+	idx++;
     }
 
     const batchPromises = queue.map((address) =>
-      registerSelling({
+    cancelListing({
         browser,
         key: address,
         price,
+        first: first === idx,
       }),
     );
 

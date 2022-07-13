@@ -13,6 +13,7 @@ const registerSelling = async (param: RegisterSellingParam): Promise<void> => {
   const sellingPage = await browser.newPage();
   const url = `https://opensea.io/assets/solana/${key}/sell`;
   await sellingPage.goto(url);
+  await sellingPage.waitForTimeout(3000)
 
   const priceInput = await sellingPage.waitForSelector('#price');
   await priceInput.type(price.toString());
@@ -40,6 +41,7 @@ const registerSelling = async (param: RegisterSellingParam): Promise<void> => {
   handleNotificationPage(browser, async (page) => {
     const connectBtn = await page.waitForSelector('button.sc-bqiRlB.hLGcmi.sc-hBUSln.dhBqSt');
     await connectBtn.click();
+    await sellingPage.waitForTimeout(10000);
     await sellingPage.close();
   });
 };
