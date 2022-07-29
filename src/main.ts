@@ -5,6 +5,7 @@ import registerSelling from './phantom/instruction/RegisterSelling';
 import cancelListing from './phantom/instruction/CancelListing';
 import * as dappeteer from './phantom/phantompeteer';
 import secret from './secret';
+import cancelListingFromProfile from './phantom/instruction/CancelListingFromProfile';
 
 async function main(): Promise<void> {
   const browser = await dappeteer.launch(puppeteer);
@@ -14,41 +15,46 @@ async function main(): Promise<void> {
     password: secret.password,
   });
 
-  await moveToOpensea(browser);
+  const openseaPage = await moveToOpensea(browser);
 
   handleNotification(browser, async (page) => {
     const connectBtn = await page.waitForSelector('button.sc-bqiRlB.hLGcmi.sc-hBUSln.dhBqSt');
     await connectBtn.click();
   });
 
-  let idx = 703;
-let first = idx;
+  let idx = 0;
+  let first = idx;
   const addresses = await import('../mint-addresses.json');
   const targetAddresses = addresses.default.slice(idx).reverse();
   const batchSize = 1;
   const price = 4.99; // sol
 
-  while (targetAddresses.length > 0) {
-    const queue = [];
-    while (queue.length !== batchSize) {
-	let target = targetAddresses.pop();
-	console.log('target : ', target);
-	console.log('idx : ' , idx);
-	queue.push(target);
-	idx++;
-    }
+  cancelListingFromProfile({
+    browser,
+    page: openseaPage,
+  });
 
-    const batchPromises = queue.map((address) =>
-    cancelListing({
-        browser,
-        key: address,
-        price,
-        first: first === idx,
-      }),
-    );
+  // while (targetAddresses.length > 0) {
+  //   const queue = [];
+  //   while (queue.length !== batchSize) {
+  //     let target = targetAddresses.pop();
+  //     console.log('target : ', target);
+  //     console.log('idx : ', idx);
+  //     queue.push(target);
+  //     idx++;
+  //   }
 
-    await Promise.all(batchPromises);
-  }
+  //   const batchPromises = queue.map((address) =>
+  //     cancelListing({
+  //       browser,
+  //       key: address,
+  //       price,
+  //       first: first === idx,
+  //     }),
+  //   );
+
+  //   await Promise.all(batchPromises);
+  // }
 }
 
 async function moveToOpensea(browser: puppeteer.Browser): Promise<puppeteer.Page> {
