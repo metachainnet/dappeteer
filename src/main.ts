@@ -22,25 +22,6 @@ async function main(): Promise<void> {
 
   const addresses = await import('../mint-addresses.json');
   const targetAddresses = addresses.default.slice(0, 2500);
-  const batchSize = 10;
-  const price = 4.99; // sol
-
-  while (targetAddresses.length > 0) {
-    const queue = [];
-    while (queue.length !== batchSize) {
-      queue.push(targetAddresses.pop());
-    }
-
-    const batchPromises = queue.map((address) =>
-      registerSelling({
-        browser,
-        key: address,
-        price,
-      }),
-    );
-
-    await Promise.all(batchPromises);
-  }
 }
 
 async function moveToOpensea(browser: puppeteer.Browser): Promise<puppeteer.Page> {
