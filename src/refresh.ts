@@ -9,9 +9,10 @@ import puppeteer from 'puppeteer';
   });
   const page = await browser.newPage();
 
-  for (let i = 0; i < webLinks.length; i++) {
+  for (let i = 1083; i < webLinks.length; i++) {
+    console.log(webLinks[i], i);
     await page.goto(webLinks[i]);
-    const btns = await page.waitForSelector('.fPnOUC');
+    const btns = await page.waitForSelector('.sc-29427738-0.sc-ebeca040-0.nFISH.jKSSoM.sc-2d0c8760-0.gLySaF');
     await btns.click();
   }
 })();

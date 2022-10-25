@@ -13,8 +13,8 @@ const checkListing = async (param: CheckListingParam): Promise<string | null> =>
   await page.waitForTimeout(2000);
 
   try {
-    const makeOfferBtn = await page.waitForSelector('button.sc-1xf18x6-0.sc-glfma3-0.jPlHEK.eqgvEc');
-    const buynowBtn = await page.waitForSelector('button.sc-1xf18x6-0.sc-glfma3-0.jPlHEK.ldKPky');
+    const makeOfferBtn = await page.waitForSelector('button.sc-29427738-0.sc-8d097ef7-0.kqzAEQ.igZRzq');
+    const buynowBtn = await page.waitForSelector('button.sc-29427738-0.sc-8d097ef7-0.kqzAEQ.hpAYnk');
 
     if (!buynowBtn && makeOfferBtn) {
       // not listing

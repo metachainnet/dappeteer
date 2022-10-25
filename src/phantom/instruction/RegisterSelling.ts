@@ -21,8 +21,8 @@ const registerSelling = async (param: RegisterSellingParam): Promise<void> => {
   await durationBtn.click();
 
   const [startDate, endDate] = await sellingPage.$$('input[type="date"]');
-  await startDate.type('0714');
-  await endDate.type('0814');
+  await startDate.type('20220714');
+  await endDate.type('20220814');
 
   const startTime = await sellingPage.waitForSelector('#start-time');
   await startTime.type('08:00');
@@ -37,11 +37,18 @@ const registerSelling = async (param: RegisterSellingParam): Promise<void> => {
   const completeBtn = await sellingPage.waitForSelector('button[type="submit"]');
   await completeBtn.click();
 
+  await sellingPage.waitForTimeout(2000);
+
+  const continueBtn = await sellingPage.waitForSelector('div[role="dialog"] button');
+  await continueBtn.click();
+
   handleNotificationPage(browser, async (page) => {
-    const connectBtn = await page.waitForSelector('button.sc-bqiRlB.hLGcmi.sc-hBUSln.dhBqSt');
-    await connectBtn.click();
-    await sellingPage.close();
+    const approveBtn = await page.waitForSelector('button[type="submit"]');
+    await approveBtn.click();
   });
+
+  await sellingPage.waitForTimeout(4000);
+  await sellingPage.close();
 };
 
 export default registerSelling;

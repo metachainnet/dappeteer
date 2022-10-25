@@ -15,7 +15,7 @@ const executePageTemplate = (
       browser.off('targetcreated', handlePageCallback);
     } else {
       // eslint-disable-next-line no-console
-      console.warn(`HandlePageCallback: Page not found ===> ${url}`);
+      // console.warn(`HandlePageCallback: Page not found ===> ${url}, ${target.url()}`);
     }
   };
 

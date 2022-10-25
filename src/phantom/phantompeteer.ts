@@ -19,3 +19,10 @@ export function setupPhantom(browser: puppeteer.Browser, options: SetupPhantomOp
     importAccount(page, options.seed, options.password);
   });
 }
+
+export async function getPhantomPage(browser: puppeteer.Browser): Promise<puppeteer.Page> {
+  const pages = await browser.pages();
+  console.log(pages.map((p) => p.url()));
+  const extensionPage = pages.find((page) => page.url().includes('chrome-extension'));
+  return extensionPage;
+}

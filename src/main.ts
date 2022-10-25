@@ -1,24 +1,20 @@
 import puppeteer from 'puppeteer';
-
-import handleNotification from './phantom/instruction/HandleNotification';
-import registerSelling from './phantom/instruction/RegisterSelling';
+import importAccount from './phantom/instruction/ImportAccount';
 import * as dappeteer from './phantom/phantompeteer';
 import secret from './secret';
 
 async function main(): Promise<void> {
   const browser = await dappeteer.launch(puppeteer);
 
-  dappeteer.setupPhantom(browser, {
-    seed: secret.seed,
-    password: secret.password,
-  });
+  const phantom = await dappeteer.getPhantomPage(browser);
+  await importAccount(phantom, secret.seed, secret.password);
 
-  await moveToOpensea(browser);
+  // handleNotificationPage(browser, async (page) => {
+  //   const connectBtn = await page.waitForSelector('button.sc-bqiRlB.hLGcmi.sc-hBUSln.dhBqSt');
+  //   await connectBtn.click();
+  // });
 
-  handleNotification(browser, async (page) => {
-    const connectBtn = await page.waitForSelector('button.sc-bqiRlB.hLGcmi.sc-hBUSln.dhBqSt');
-    await connectBtn.click();
-  });
+  // await moveToOpensea(browser);
 
   const addresses = await import('../mint-addresses.json');
   const targetAddresses = addresses.default.slice(0, 2500);
