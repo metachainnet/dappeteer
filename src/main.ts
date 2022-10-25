@@ -16,8 +16,15 @@ async function main(): Promise<void> {
 
   // await moveToOpensea(browser);
 
-  const addresses = await import('../mint-addresses.json');
-  const targetAddresses = addresses.default.slice(0, 2500);
+  // const addresses = await import('../mint-addresses.json');
+  // for (let i = 700; i < addresses.default.length; i++) {
+  //   try {
+  //     await cancelListing({ browser, key: addresses.default[i] });
+  //   } catch (e) {
+  //     // eslint-disable-next-line no-console
+  //     console.error(e);
+  //   }
+  // }
 }
 
 async function moveToOpensea(browser: puppeteer.Browser): Promise<puppeteer.Page> {
